@@ -13,7 +13,7 @@ set -ouex pipefail
 #dnf5 install -y
 
 # install MEGA Sync Desktop app
-wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm && sudo dnf install "$PWD/megasync-Fedora_42.x86_64.rpm"
+wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm && dnf install "$PWD/megasync-Fedora_42.x86_64.rpm"
 
 # Use a COPR Example:
 #
