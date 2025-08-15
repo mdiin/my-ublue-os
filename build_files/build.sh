@@ -10,7 +10,33 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 remove -y homebrew
+# dnf5 remove -y homebrew
+
+dnf5 -y remove plasma-workspace plasma-* kde-*
+
+# setup hyprland from COPR
+dnf5 -y copr enable solopasha/hyprland
+dnf5 -y install \
+        hyprland \
+        hyprpaper \
+        hyprpicker \
+        hypridle \
+        hyprlock \
+        hyprsunset \
+        hyprpolkitagent \
+        hyprsysteminfo \
+        hyprpanel \
+        qt6ct-kde \
+        hyprland-qt-support \
+        hyprland-qtutils
+dnf5 -y copr disable solopasha/hyprland
+
+# more desktop-environment utils
+dnf5 -y install \
+        sddm \
+        pipewire \
+        wofi \
+        brightnessctl
 
 # install MEGA Sync Desktop app
 #wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm && dnf5 -y install "$PWD/megasync-Fedora_42.x86_64.rpm"
@@ -22,6 +48,5 @@ dnf5 remove -y homebrew
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
-#### Example for enabling a System Unit File
-
 systemctl enable podman.socket
+systemctl --global enable hyprpanel.service
