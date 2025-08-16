@@ -33,7 +33,8 @@ dnf5 -y copr disable solopasha/hyprland
 
 # more desktop-environment utils
 dnf5 -y install \
-        sddm \
+        lightdm-gtk \
+        thunar \
         pipewire \
         wofi \
         brightnessctl
