@@ -33,11 +33,13 @@ dnf5 -y copr disable solopasha/hyprland
 
 # more desktop-environment utils
 dnf5 -y install \
-        lightdm-gtk \
+        lightdm \
+        slick-greeter \
         thunar \
         pipewire \
-        wofi \
-        brightnessctl
+        brightnessctl \
+        flameshot \
+        fuzzel
 
 # install MEGA Sync Desktop app
 #wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm && dnf5 -y install "$PWD/megasync-Fedora_42.x86_64.rpm"
@@ -49,5 +51,6 @@ dnf5 -y install \
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
+systemctl daemon-reload
 systemctl enable podman.socket
 systemctl --global enable hyprpanel.service
