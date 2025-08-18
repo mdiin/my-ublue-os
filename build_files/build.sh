@@ -45,7 +45,9 @@ dnf5 -y install \
         pipewire \
         brightnessctl \
         flameshot \
-        fuzzel
+        fuzzel \
+        btop \
+
 
 # install MEGA Sync Desktop app
 #wget https://mega.nz/linux/repo/Fedora_42/x86_64/megasync-Fedora_42.x86_64.rpm && dnf5 -y install "$PWD/megasync-Fedora_42.x86_64.rpm"
