@@ -28,8 +28,14 @@ dnf5 -y install \
         hyprpanel \
         qt6ct-kde \
         hyprland-qt-support \
-        hyprland-qtutils
+        hyprland-qtutils \
+        swww
 dnf5 -y copr disable solopasha/hyprland
+
+dnf5 -y copr enable heus-sueh/hyprland
+dnf5 -y install \
+        matugen
+dnf5 -y copr disable heus-sueh/hyprland
 
 # more desktop-environment utils
 dnf5 -y install \
