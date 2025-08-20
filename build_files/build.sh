@@ -32,10 +32,10 @@ dnf5 -y install \
         swww
 dnf5 -y copr disable solopasha/hyprland
 
-dnf5 -y copr enable heus-sueh/hyprland
+dnf5 -y copr enable heus-sueh/packages
 dnf5 -y install \
         matugen
-dnf5 -y copr disable heus-sueh/hyprland
+dnf5 -y copr disable heus-sueh/packages
 
 # more desktop-environment utils
 dnf5 -y install \
