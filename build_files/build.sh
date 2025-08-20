@@ -29,13 +29,10 @@ dnf5 -y install \
         qt6ct-kde \
         hyprland-qt-support \
         hyprland-qtutils \
-        swww
-dnf5 -y copr disable solopasha/hyprland
-
-dnf5 -y copr enable heus-sueh/packages
-dnf5 -y install \
+        swww \
+        cliphist \
         matugen
-dnf5 -y copr disable heus-sueh/packages
+dnf5 -y copr disable solopasha/hyprland
 
 # more desktop-environment utils
 dnf5 -y install \
@@ -46,7 +43,7 @@ dnf5 -y install \
         brightnessctl \
         flameshot \
         fuzzel \
-        btop \
+        btop
 
 
 # install MEGA Sync Desktop app
