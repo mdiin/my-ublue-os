@@ -36,10 +36,11 @@ dnf5 -y copr disable solopasha/hyprland
 
 # more desktop-environment utils
 dnf5 -y install \
-        lightdm \
-        slick-greeter \
-        thunar \
         pipewire \
+        sddm \
+        sddm-wayland-generic \
+        sddm-conf \
+        sddm-breeze \
         brightnessctl \
         flameshot \
         fuzzel \
