@@ -25,7 +25,7 @@ dnf5 -y install \
         hyprsunset \
         hyprpolkitagent \
         hyprsysteminfo \
-        hyprpanel \
+        # hyprpanel \
         qt6ct-kde \
         hyprland-qt-support \
         hyprland-qtutils \
@@ -59,4 +59,4 @@ dnf5 -y install \
 # dnf5 -y copr disable ublue-os/staging
 
 systemctl enable podman.socket
-systemctl --global enable hyprpanel.service
+# systemctl --global enable hyprpanel.service
