@@ -44,7 +44,8 @@ dnf5 -y install \
         brightnessctl \
         flameshot \
         fuzzel \
-        btop
+        btop \
+        foot
 
 
 # install MEGA Sync Desktop app
