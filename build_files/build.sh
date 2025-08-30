@@ -25,7 +25,6 @@ dnf5 -y install \
         hyprsunset \
         hyprpolkitagent \
         hyprsysteminfo \
-        # hyprpanel \
         qt6ct-kde \
         hyprland-qt-support \
         hyprland-qtutils \
@@ -45,7 +44,8 @@ dnf5 -y install \
         flameshot \
         fuzzel \
         btop \
-        foot
+        foot \
+        waybar
 
 
 # install MEGA Sync Desktop app
