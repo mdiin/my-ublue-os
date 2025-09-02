@@ -1,25 +1,58 @@
 #!/usr/bin/env bb
 
-(require '[clojure.java.shell :as shell])
+(require '[babashka.process :refer [shell]])
 (require '[clojure.string :as str])
 
 (def ^:dynamic *prefix* nil)
 
 (defn sh
-  [cmd & args]
-  (if *prefix*
-    (apply shell/sh *prefix* cmd args)
-    (apply shell/sh cmd args)))
+  ([cmd args]
+   (sh {} cmd args))
+  ([opts cmd args]
+   (let [options (merge {} opts {:out :string})]
+     (if *prefix*
+       (apply shell options *prefix* cmd args)
+       (apply shell options cmd args)))))
 
 (defn network-menu
   []
-  (let [devices (sh "nmcli" "-t" "d")]
-    devices))
+  (let [devices (sh "nmcli" ["-t" "d"])]
+    (-> devices
+        :out
+        (str/split-lines)
+        (->> (map (fn [line]
+                    (take 3 (str/split line #":"))))
+             (map-indexed (fn [idx [device type status]]
+                            {:idx idx
+                             :network/device device
+                     :network/type type
+                     :network/status status}))))))
 
-(binding [*prefix* "distrobox-host-exec"]
-  (-> (network-menu)
-      :out
-      (str/split-lines)
-      (->> (map (fn [line]
-                  (take 3 (str/split line #":"))))))
-  )
+(defn network-menu-entries []
+  (binding [*prefix* "distrobox-host-exec"]
+    (->> (network-menu)
+         (map (fn [{:network/keys [device status type]}]
+                (str type " (" device ")" " - " status)))
+         (str/join "\n"))))
+
+(defn ->entries [data]
+  (->> data
+       (sort-by :idx)
+         (map (fn [{:network/keys [device status type]}]
+                (str type " (" device ")" " - " status)))
+         (str/join "\n")))
+
+(defn show-network-menu []
+  (let [menu-data (binding [*prefix* "distrobox-host-exec"]
+                    (network-menu))
+
+        selection (str/trim-newline
+                   (:out (sh {:in (->entries menu-data)}
+                             "fuzzel"
+                             ["-d" "--index"])))]
+    (filter (fn [md]
+              (= selection (str (:idx md))))
+            menu-data)))
+
+(comment
+  (show-network-menu))
