@@ -1,0 +1,6 @@
+[Unit]
+Description=Handle monitor hotplug events
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/monitor-hotplug-bb

@@ -1,0 +1,68 @@
+#!/usr/bin/env bb
+
+(require '[clojure.java.io :as io])
+(require '[clojure.edn :as edn])
+(require '[cheshire.core :as json])
+(require '[babashka.process :refer [shell]])
+
+(def config-file (str (System/getenv "HOME") "/.config/hypr/monitor-config.edn"))
+(def monitor-file-base-path (str (System/getenv "HOME") "/.config/hypr/monitor-"))
+(def hyprland-config-path (str (System/getenv "HOME") "/.config/hypr/hyprland.conf"))
+
+(defn systemd-log
+  [msg]
+  (shell "logger" msg))
+
+(defn monitor-setup
+  []
+  (-> (shell {:out :string} "hyprctl" "monitors" "-j")
+      :out
+      (json/decode keyword)))
+
+(defn make-default-config
+  []
+  (systemd-log (str "Creating default config at " config-file))
+  (spit (io/file config-file) {:monitor/default (str monitor-file-base-path "default.conf")}))
+
+(defn find-monitor-config
+  [config monitors]
+  (let [descriptions (into #{} (map :description) monitors)
+        names (into #{} (map :name) monitors)]
+    (get config descriptions
+         (get config names
+              (get config :monitor/default)))))
+
+(defn read-config
+  []
+  (try
+    (with-open [rdr (java.io.PushbackReader. (io/reader config-file))]
+      (edn/read rdr))
+    (catch java.io.FileNotFoundException _ex
+      (make-default-config)
+      (read-config))))
+
+(defn reload-hyprland-config
+  []
+  (shell "hyprctl" "reload"))
+
+(defn line-to-update?
+  [line]
+  (re-matches #"^source =.*monitor.*$" line))
+
+(defn update-config
+  [monitor-config-path]
+  (let [new-config-lines (with-open [rdr (io/reader hyprland-config-path)]
+                           (mapv (fn [line]
+                                   (if (line-to-update? line)
+                                     (str "source = " monitor-config-path)
+                                     line))
+                                 (line-seq rdr)))]
+    (with-open [wrt (io/writer hyprland-config-path)]
+      (doseq [line new-config-lines]
+        (.write wrt (str line "\n"))))))
+
+(let [config (read-config)
+      monitors (monitor-setup)]
+  (update-config (find-monitor-config config monitors))
+  (reload-hyprland-config)
+  )
